@@ -19,6 +19,9 @@ public class Shares {
     private double shares;
     private Integer price;
     private Integer total;
+    @ManyToOne(fetch =  FetchType.LAZY, optional = false)
+    @JoinColumn(name = "share_id", nullable = false)
+    private User user;
     
     
 

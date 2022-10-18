@@ -33,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
+		
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService());
 		authProvider.setPasswordEncoder(passwordEncoder());
@@ -47,7 +48,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/").authenticated()
+
+		http.cors().and().csrf().disable();
+		http.authorizeRequests().antMatchers("/","/buy").authenticated()
 		.anyRequest().permitAll()
 		.and().formLogin()
 				.usernameParameter("name").defaultSuccessUrl("/").permitAll().and().logout().logoutSuccessUrl("/")

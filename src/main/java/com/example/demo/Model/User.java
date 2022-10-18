@@ -1,8 +1,8 @@
 package com.example.demo.Model;
 import javax.persistence.*;
 import lombok.*;
-import java.util.Date;
-import java.util.Set;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +22,8 @@ public class User {
     @Column(nullable = false, length = 64)
     private String password;
     private Integer cash;
+    @OneToMany(mappedBy = "shares", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Shares> shares;
     
   
     

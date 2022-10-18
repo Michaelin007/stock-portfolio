@@ -1,11 +1,9 @@
-{% extends "layout.html" %}
+<head id="bab" th:replace="layout :: site-head"></head>
 
-{% block title %}
-    Quoted
-{% endblock %}
-
-{% block main %}
+<div th:replace="layout :: site-header"></div>
     <div class="container">
-        <h1>A share of {{ stockSpec['name'] }} costs {{ stockSpec['price'] }}.</h1>
+        <!--h1>A share of [[${"price}]] costs [[${sysm}]].</h1-->
+        <p th:text="'price:' + ${price}" />
+        <p th:text="'share-symbol:' + ${sysm}"/>
     </div>
-{% endblock %}
+<div th:replace="layout :: site-footer"></div>

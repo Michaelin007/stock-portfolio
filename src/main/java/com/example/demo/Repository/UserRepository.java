@@ -15,7 +15,7 @@ import com.example.demo.Model.User;
 import com.example.demo.Model.*;
 
 @Repository
-public interface UserRepository extends PagingAndSortingRepository<User, Long> {
+public interface UserRepository extends PagingAndSortingRepository<User, Integer> {
 
 	@Query("SELECT u FROM User u WHERE u.username = ?1")
 	public User findByUsername(String username);

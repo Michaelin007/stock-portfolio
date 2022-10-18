@@ -12,25 +12,26 @@
               <th scope="col">TOTAL</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody data-th-each="share:${share}">
+        <td>[[${share.symbol}]]</td>
+        <td>[[${share.name}]]</td>
+        <td>[[${share.shares}]]</td>
+        <td>[[${share.price}]]</td>
+        <td>[[${share.total}]]</td>
             
-            <tr>
-              <th scope="row">{{ holding["symbol"] }}</th>
-              <td>{{ holding["name"] }}</td>
-              <td>{{ holding["shares"] }}</td>
-              <td>{{ holding["price"] }}</td>
-              <td>{{ holding["total"] }}</td>
-            </tr>
+
             
             <tr>
                 <th scope="row">CASH</th>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td ></span>
+                <!--td >[[${#request.userPrincipal.principal.cash}]]</span-->
+
 </td>
             </tr>
         </tbody>
+        <td>[[${user.cash}]] </td>
         <tfoot>
             <tr>
                 <td></td>

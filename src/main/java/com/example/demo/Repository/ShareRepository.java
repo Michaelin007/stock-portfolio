@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.Model.*;
 
 @Repository
-public interface ShareRepository extends PagingAndSortingRepository<Shares, Long> {
+public interface ShareRepository extends PagingAndSortingRepository<Shares,Integer > {
 
 }

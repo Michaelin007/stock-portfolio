@@ -1,11 +1,7 @@
-{% extends "layout.html" %}
+<head id="bab" th:replace="layout :: site-head"></head>
 
-{% block title %}
-    Quote
-{% endblock %}
-
-{% block main %}
-    <form action="/quote" method="post">
+<div th:replace="layout :: site-header"></div>
+    <form  th:action="@{/quote}" method="post">
         <div class="form-group">
             <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="Symbol" type="text">
         </div>

@@ -1,10 +1,6 @@
-{% extends "layout.html" %}
+<head id="bab" th:replace="layout :: site-head"></head>
 
-{% block title %}
-    Buy
-{% endblock %}
-
-{% block main %}
+<div th:replace="layout :: site-header"></div>
     <form action="/buy" method="post">
         <div class="form-group">
             <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="Symbol" type="text">
@@ -14,4 +10,4 @@
         </div>
         <button class="btn btn-primary" type="submit">Buy</button>
     </form>
-{% endblock %}
+<div th:replace="layout :: site-footer"></div>

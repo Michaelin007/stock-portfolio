@@ -9,37 +9,30 @@
               <th scope="col">Name</th>
               <th scope="col">Shares</th>
               <th scope="col">Price</th>
+                <th scope="col">Date</th>
               <th scope="col">TOTAL</th>
             </tr>
         </thead>
-        <tbody data-th-each="share:${share}">
+        <tbody th:each="share:${share}">
         <td>[[${share.symbol}]]</td>
         <td>[[${share.name}]]</td>
         <td>[[${share.shares}]]</td>
         <td>[[${share.price}]]</td>
+        <td>[[${share.date}]]</td>
         <td>[[${share.total}]]</td>
-            
 
-            
-            <tr>
-                <th scope="row">CASH</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <!--td >[[${#request.userPrincipal.principal.cash}]]</span-->
 
-</td>
-            </tr>
         </tbody>
-        <td>[[${user.cash}]] </td>
+
         <tfoot>
             <tr>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{ all_total }}</td>
+                <td></td>
             </tr>
         </tfoot>
     </table>
+    Total Available Cash : [[${user.cash}]]
 <div th:replace="layout :: site-footer"></div>

@@ -17,10 +17,10 @@ public class Shares {
     private String symbol;
     private Date date = new Date();
     private double shares;
-    private Integer price;
-    private Integer total;
+    private double price;
+    private double total;
     @ManyToOne(fetch =  FetchType.LAZY, optional = false)
-    @JoinColumn(name = "share_id", nullable = false)
+    @JoinColumn(name = "share_id", nullable = true)
     private User user;
     
     

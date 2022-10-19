@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,13 +59,15 @@ public class ShareController {
 
 // user = (User<Plug>v
   User user = userRepository.findByUsername(principal.getName());
-      List<Shares> share = (List<Shares>) user.getShares();
+  List<Shares> share = (List<Shares>) shareRepository.findAll();
+
 		//Shares share = (Shares) user.getShares();
 
     
 	//	Shares share  = (Shares) shareRepository.
 		model.addAttribute("share", share);
 		model.addAttribute("user", user);
+    System.out.println(share);
 	//	model.addAttribute("share", share);
 
 
@@ -97,7 +100,8 @@ public class ShareController {
 	public String buyStock(@ModelAttribute("user") User newUser, Principal principal, HttpServletRequest request, Model model) {
 		User user = userRepository.findByUsername(principal.getName());
 
-		Shares share = (Shares) user.getShares();
+		//Optional<Shares> share = shareRepository.findById(user.getId());
+		Shares share = new Shares();
 		String symbol = request.getParameter("symbol");
 		String u_symbol = symbol.toUpperCase();
 		ResponseEntity <String> up = lookup.getAsJson(u_symbol);
@@ -111,28 +115,36 @@ public class ShareController {
 		double price = obj1.get("latestPrice").getAsDouble();
 		double transaction = shares_int * price;
 		String sysm = obj1.get("symbol").getAsString();
+		String companyName= obj1.get("companyName").getAsString();
 
 
 		int new_cash = (int) (user.getCash() - transaction);
 		user.setUsername(user.getUsername());
 		user.setPassword(user.getPassword());
 		user.setCash(new_cash);
-		user.getShares();
+		user.setShares(user.getShares());
 
 
-		userRepository.save(user);
 		//String d_symbol = obj.getString("symbol");
 
-		share.setPrice((int) price);
+
+
+		share.setPrice( price);
 		share.setSymbol(sysm);
 		share.setShares(shares_int);
 		share.setDate(new Date());
+		share.setTotal(transaction);
+		share.setName(companyName);
+		share.setUser(user);
+
 
 
 
 		shareRepository.save(share);
+		userRepository.save(user);
 
 		model.addAttribute("user", user);
+		model.addAttribute("share", share);
 		model.addAttribute("price", price);
 
 
@@ -168,8 +180,8 @@ public class ShareController {
 		user.setUsername(user.getUsername());
 		user.setPassword(user.getPassword());
 		user.setCash(new_cash);
+		//user.setShares();
 
-		userRepository.save(user);
 
 
 
@@ -177,8 +189,11 @@ public class ShareController {
 		share.setSymbol(sysm);
 		share.setShares(-1 * shares_int);
 		share.setDate(new Date());
+	//	share.setUser(user.);
 
 		shareRepository.save(share);
+		userRepository.save(user);
+
 
 		return "sell";
 	}

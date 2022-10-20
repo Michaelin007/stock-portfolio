@@ -1,10 +1,8 @@
 package com.example.demo.Controller;
 
 import java.security.Principal;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -59,16 +57,15 @@ public class ShareController {
 
 // user = (User<Plug>v
   User user = userRepository.findByUsername(principal.getName());
-  List<Shares> share = (List<Shares>) shareRepository.findAll();
+		String username= principal.getName();
 
-		//Shares share = (Shares) user.getShares();
+		List<Shares> share = (List<Shares>) shareRepository.findAll().stream()
+				.filter(shares -> username.equals(shares.getUser().getUsername()))
+				.collect(Collectors.toList());
 
-    
-	//	Shares share  = (Shares) shareRepository.
 		model.addAttribute("share", share);
 		model.addAttribute("user", user);
-    System.out.println(share);
-	//	model.addAttribute("share", share);
+    	System.out.println(share);
 
 
 
@@ -102,6 +99,8 @@ public class ShareController {
 
 		//Optional<Shares> share = shareRepository.findById(user.getId());
 		Shares share = new Shares();
+		//Shares share = user.getShares();
+
 		String symbol = request.getParameter("symbol");
 		String u_symbol = symbol.toUpperCase();
 		ResponseEntity <String> up = lookup.getAsJson(u_symbol);
@@ -152,9 +151,14 @@ public class ShareController {
 		return "redirect:/?success";
 	}
 	@GetMapping("/sell")
-	public String sell(Model model) {
-		model.addAttribute("user","");
-		model.addAttribute("share","");
+	public String sell(Model model, Principal principal) {
+		String username= principal.getName();
+
+		List<Shares> share = (List<Shares>) shareRepository.findAll().stream()
+						.filter(shares -> username.equals(shares.getUser().getUsername()))
+								.collect(Collectors.toList());
+
+		model.addAttribute("share", share);
 
 
 		return "sell";
@@ -163,12 +167,11 @@ public class ShareController {
 	@PostMapping("/sell")
 	public String sellStock(Principal principal, HttpServletRequest request, Model model) {
 		User user = userRepository.findByUsername(principal.getName());
-		Shares share = (Shares) user.getShares();
-
+		Shares share = new Shares();
 		String symbol = request.getParameter("symbol");
 		String u_symbol = symbol.toUpperCase();
 		String shares = request.getParameter("shares");
-		int shares_int = Integer.parseInt(shares);
+		double shares_int = Double.parseDouble(shares);
 		ResponseEntity <String> up = lookup.getAsJson(u_symbol);
 		JsonParser parser = new JsonParser();
 		JsonObject obj1 = parser.parse(up.getBody()).getAsJsonObject();
@@ -176,26 +179,24 @@ public class ShareController {
 		String sysm = obj1.get("symbol").getAsString();
 		double transaction = shares_int * price;
 
-		int new_cash = (int) (user.getCash() + transaction);
+		double new_cash = (user.getCash() + transaction);
 		user.setUsername(user.getUsername());
 		user.setPassword(user.getPassword());
 		user.setCash(new_cash);
-		//user.setShares();
+		user.setShares(user.getShares());
 
-
-
-
-		share.setPrice((int) price);
+		share.setPrice(price);
 		share.setSymbol(sysm);
 		share.setShares(-1 * shares_int);
 		share.setDate(new Date());
+		share.setUser(user);
 	//	share.setUser(user.);
 
 		shareRepository.save(share);
 		userRepository.save(user);
 
 
-		return "sell";
+		return "redirect:/?success";
 	}
 
 	@GetMapping("/quote")
@@ -217,36 +218,39 @@ public class ShareController {
 		String symbol = request.getParameter("symbol");
 		String u_symbol = symbol.toUpperCase();
 		ResponseEntity<String> up = lookup.getAsJson(u_symbol);
-		//converting string to return json with gson
-		//JsonObject o = JsonParser.parseString(up).getAsJsonObject();
-	    //String json = new Gson().toJson(up );
+
 		 JsonParser parser = new JsonParser();
 	    JsonObject obj1 = parser.parse(up.getBody()).getAsJsonObject();
-		//JSONObject obj = new JSONObject(obj1);
-	
-		//int price = obj.getInt("latestPrice");
-		//String sysm = obj.getString("symbol");
-		
+
+		String name= obj1.get("companyName").getAsString();
 		double price = obj1.get("latestPrice").getAsDouble();
 		String sysm = obj1.get("symbol").getAsString();
 
 		model.addAttribute("price", price);
 		model.addAttribute("sysm", sysm);
+		model.addAttribute("name", name);
 
 		return "quoted";
 	}
 
 	@GetMapping("/history")
-	public String getHistory(Model model, @AuthenticationPrincipal CustomUserDetails c) {
-		String username = c.getUsername();
-		User user = userRepository.findByUsername(username);
+	public String getHistory(Model model, Principal principal) {
 
-		// List a = user.getPassword();
 
-		// List<User> share=(List<Shares>) shareRepository.findAll();
-		// model.addAttribute("share", share);
+		String username= principal.getName();
 
-		return "";
+		List<Shares> share = (List<Shares>) shareRepository.findAll().stream()
+				.filter(shares -> username.equals(shares.getUser().getUsername()))
+				.collect(Collectors.toList());
+
+		model.addAttribute("share", share);
+
+
+
+
+
+
+		return "history";
 	}
 
 	@GetMapping("/home/")

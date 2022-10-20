@@ -21,7 +21,7 @@ public class User {
     private String username;
     @Column(nullable = false, length = 64)
     private String password;
-    private Integer cash;
+    private double cash;
     @OneToMany(mappedBy = "shares", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Shares> shares;
     

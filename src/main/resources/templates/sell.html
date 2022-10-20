@@ -1,18 +1,14 @@
-{% extends "layout.html" %}
+<head id="bab" th:replace="layout :: site-head"></head>
 
-{% block title %}
-    Sell
-{% endblock %}
-
-{% block main %}
+<div th:replace="layout :: site-header"></div>
     <form action="/sell" method="post">
         <fieldset>
             <div class="form-select">
                 <select name="symbol">
-                    <option placeholder="Symbol"></option></option>
-                    {% for symbol in symbols %}
-                        <option value="{{symbol}}">{{symbol}}</option>
-                    {% endfor %}
+                    <option   placeholder="Symbol"></option>
+
+                        <option th:each="share:${share}">[[${share.symbol}]]</option>
+
                 </select>
             </div>
             <div class="form-group">
@@ -21,4 +17,4 @@
             <button class="btn btn-primary" type="submit">Sell</button>
         </fieldset>
     </form>
-{% endblock %}
+<div th:replace="layout :: site-footer"></div>

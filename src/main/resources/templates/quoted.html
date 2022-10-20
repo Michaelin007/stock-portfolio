@@ -1,9 +1,22 @@
 <head id="bab" th:replace="layout :: site-head"></head>
 
 <div th:replace="layout :: site-header"></div>
-    <div class="container">
-        <!--h1>A share of [[${"price}]] costs [[${sysm}]].</h1-->
-        <p th:text="'price:' + ${price}" />
-        <p th:text="'share-symbol:' + ${sysm}"/>
-    </div>
+<table class="table table-striped table-sm">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Symbol</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price (USD)</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <td>[[${sysm}]]</td>
+    <td>[[${name}]]</td>
+    <td>[[${price}]]</td>
+    </tbody>
+
+    <tfoot>
+
+</table>
 <div th:replace="layout :: site-footer"></div>

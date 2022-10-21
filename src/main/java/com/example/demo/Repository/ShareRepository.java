@@ -12,7 +12,7 @@ import java.util.List;
 public interface ShareRepository extends PagingAndSortingRepository<Shares,Integer > {
 
 
-    Shares findById(User user);
+    Shares findByUser(User user);
 
     Object findAllById(User user);
 

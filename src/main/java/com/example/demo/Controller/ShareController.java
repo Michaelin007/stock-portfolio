@@ -167,7 +167,7 @@ public class ShareController {
 	@PostMapping("/sell")
 	public String sellStock(Principal principal, HttpServletRequest request, Model model) {
 		User user = userRepository.findByUsername(principal.getName());
-		Shares share = new Shares();
+		Shares share = shareRepository.findByUser(user);
 		String symbol = request.getParameter("symbol");
 		String u_symbol = symbol.toUpperCase();
 		String shares = request.getParameter("shares");
@@ -179,6 +179,7 @@ public class ShareController {
 		String sysm = obj1.get("symbol").getAsString();
 		double transaction = shares_int * price;
 
+	String companyName= obj1.get("companyName").getAsString();
 		double new_cash = (user.getCash() + transaction);
 		user.setUsername(user.getUsername());
 		user.setPassword(user.getPassword());
@@ -187,11 +188,13 @@ public class ShareController {
 
 		share.setPrice(price);
 		share.setSymbol(sysm);
-		share.setShares(-1 * shares_int);
+		share.setShares(share.getShares() - shares_int);
 		share.setDate(new Date());
 		share.setUser(user);
 	//	share.setUser(user.);
 
+	share.setName(companyName);
+		share.setTotal(share.getTotal() - transaction);
 		shareRepository.save(share);
 		userRepository.save(user);
 
